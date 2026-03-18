@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.galvisjaddys.R
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.galvisjaddys.databinding.FragmentUserListBinding
 import com.example.galvisjaddys.viewmodel.UserViewModel
 
@@ -18,59 +18,66 @@ class UserListFragment : Fragment() {
 
     private val viewModel: UserViewModel by activityViewModels()
 
+    private lateinit var adapter: UserAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentUserListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        setupRecyclerView()
+        setupObservers()
+        setupClickListeners()
+    }
+
+    private fun setupRecyclerView() {
+        adapter = UserAdapter { user ->
+            // 🔥 Click en usuario
+            viewModel.selectUser(user)
+
+            val action = UserListFragmentDirections
+                .actionListToDetail(userId = user.id)
+
+            findNavController().navigate(action)
+        }
+
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = this@UserListFragment.adapter
+        }
+    }
+
+    private fun setupObservers() {
         viewModel.users.observe(viewLifecycleOwner) { userList ->
-
             binding.textViewUserCount.text = "Total usuarios: ${userList.size}"
-
-            val usersText = userList.joinToString("\n") {
-                "${it.name} - ${it.email}"
-            }
-
-            binding.textViewUserList.text = usersText
+            adapter.submitList(userList)
         }
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility =
+                if (isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun setupClickListeners() {
         binding.buttonAddUser.setOnClickListener {
-
-            val user = viewModel.users.value?.firstOrNull()
-
-            user?.let {
-                viewModel.selectUser(it)
-                findNavController().navigate(R.id.action_list_to_detail)
-            }
-
+            viewModel.addUser(
+                name = "Usuario ${System.currentTimeMillis() % 100}",
+                email = "correo${System.currentTimeMillis() % 100}@test.com",
+                age = (20..40).random()
+            )
         }
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-    private fun setupClickListeners() {
-        binding.buttonAddUser.setOnClickListener {
-            // Seleccionar el primer usuario y navegar con Safe Args
-            viewModel.users.value?.firstOrNull()?.let { user ->
-                viewModel.selectUser(user)
-
-                // Usar Safe Args generado automáticamente
-                val action = UserListFragmentDirections
-                    .actionListToDetail(userId = user.id)
-                findNavController().navigate(action)
-            }
-        }
-    }
-
 }
