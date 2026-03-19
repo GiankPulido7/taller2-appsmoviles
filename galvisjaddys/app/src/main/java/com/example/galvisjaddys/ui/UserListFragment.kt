@@ -60,19 +60,19 @@ class UserListFragment : Fragment() {
             adapter.submitList(userList)
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.visibility =
-                if (isLoading) View.VISIBLE else View.GONE
-        }
+       // viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+         //   binding.progressBar.visibility =
+           //     if (isLoading) View.VISIBLE else View.GONE
+        //}
     }
 
     private fun setupClickListeners() {
         binding.buttonAddUser.setOnClickListener {
-            viewModel.addUser(
-                name = "Usuario ${System.currentTimeMillis() % 100}",
-                email = "correo${System.currentTimeMillis() % 100}@test.com",
-                age = (20..40).random()
-            )
+           // viewModel.addUser(
+             //   name = "Usuario ${System.currentTimeMillis() % 100}",
+               // email = "correo${System.currentTimeMillis() % 100}@test.com",
+               // age = (20..40).random()
+           // )
         }
     }
 

@@ -16,4 +16,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "galvisjaddys"
 include(":app")
-include(":modulonuevo")

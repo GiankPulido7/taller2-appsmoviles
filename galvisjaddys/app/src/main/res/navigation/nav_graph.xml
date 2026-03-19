@@ -10,13 +10,19 @@
 
         <action
             android:id="@+id/action_list_to_detail"
-            app:destination="@id/userDetailFragment"/>
+            app:destination="@id/userDetailFragment" />
 
     </fragment>
 
     <fragment
         android:id="@+id/userDetailFragment"
         android:name="com.example.galvisjaddys.ui.UserDetailFragment"
-        android:label="Detalle"/>
+        android:label="Detalle">
+
+        <argument
+            android:name="userId"
+            app:argType="integer" />
+
+    </fragment>
 
 </navigation>
