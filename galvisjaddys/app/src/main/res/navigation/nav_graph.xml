@@ -1,27 +1,28 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/userListFragment">
+    app:startDestination="@id/taskListFragment">
 
     <fragment
-        android:id="@+id/userListFragment"
-        android:name="com.example.galvisjaddys.ui.UserListFragment"
-        android:label="Lista">
+        android:id="@+id/taskListFragment"
+        android:name="com.example.galvisjaddys.ui.task.TaskListFragment"
+        android:label="Mis tareas">
 
         <action
             android:id="@+id/action_list_to_detail"
-            app:destination="@id/userDetailFragment" />
+            app:destination="@id/taskDetailFragment" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/userDetailFragment"
-        android:name="com.example.galvisjaddys.ui.UserDetailFragment"
-        android:label="Detalle">
+        android:id="@+id/taskDetailFragment"
+        android:name="com.example.galvisjaddys.ui.task.TaskDetailFragment"
+        android:label="Detalle tarea">
 
         <argument
-            android:name="userId"
-            app:argType="integer" />
+            android:name="taskId"
+            app:argType="integer"
+            android:defaultValue="-1" />
 
     </fragment>
 
